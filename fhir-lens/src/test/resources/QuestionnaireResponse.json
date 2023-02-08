@@ -1,0 +1,15 @@
+{
+  "resourceType": "QuestionnaireResponse",
+  "status": "completed",
+  "item": [
+    {
+      "linkId": "first question",
+      "text": "this is the question",
+      "answer": [
+        {
+          "valueString": "this is the answer"
+        }
+      ]
+    }
+  ]
+}

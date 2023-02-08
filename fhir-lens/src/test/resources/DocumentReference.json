@@ -1,0 +1,13 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "123",
+  "description": "this is the title",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "application/pdf",
+        "data": "changeme"
+      }
+    }
+  ]
+}

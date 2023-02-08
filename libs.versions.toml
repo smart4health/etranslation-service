@@ -1,0 +1,68 @@
+[versions]
+# mockk has issues with 1.7.0 as of 20 Jun 2022...
+kotlin = "1.8.0"
+http4k = "4.37.0.0"
+hapi = "6.2.5"
+dagger = "2.44.2"
+jackson = "2.14.2"
+jdbi = "3.36.0"
+
+[libraries]
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+
+hapi-fhir-base = { module = "ca.uhn.hapi.fhir:hapi-fhir-base", version.ref = "hapi" }
+hapi-fhir-structures-r4 = { module = "ca.uhn.hapi.fhir:hapi-fhir-structures-r4", version.ref = "hapi" }
+
+hikari = "com.zaxxer:HikariCP:5.0.1"
+
+http4k-core = { module = "org.http4k:http4k-core", version.ref = "http4k" }
+http4k-server-jetty = { module = "org.http4k:http4k-server-jetty", version.ref = "http4k" }
+http4k-cloudnative = { module = "org.http4k:http4k-cloudnative", version.ref = "http4k" }
+http4k-format-jackson = { module = "org.http4k:http4k-format-jackson", version.ref = "http4k" }
+http4k-format-jackson-xml = { module = "org.http4k:http4k-format-jackson-xml", version.ref = "http4k" }
+http4k-client-okhttp = { module = "org.http4k:http4k-client-okhttp", version.ref = "http4k" }
+http4k-security-digest = { module = "org.http4k:http4k-security-digest", version.ref = "http4k" }
+
+jackson-dataformat-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+
+jdbi-core = { module = "org.jdbi:jdbi3-core", version.ref = "jdbi" }
+jdbi-jackson2 = { module = "org.jdbi:jdbi3-jackson2", version.ref = "jdbi" }
+jdbi-kotlin = { module = "org.jdbi:jdbi3-kotlin", version.ref = "jdbi" }
+jdbi-kotlin-sqlobject = { module = "org.jdbi:jdbi3-kotlin-sqlobject", version.ref = "jdbi" }
+jdbi-postgres = { module = "org.jdbi:jdbi3-postgres", version.ref = "jdbi" }
+
+jna = "net.java.dev.jna:jna:5.13.0"
+
+kotlin-result = "com.michael-bull.kotlin-result:kotlin-result:1.1.16"
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
+lazysodium-java = "com.goterl:lazysodium-java:5.1.4"
+
+liquibase-core = "org.liquibase:liquibase-core:4.19.0"
+liquibase-slf4j = "com.mattbertolini:liquibase-slf4j:4.1.0"
+
+logback-classic = "ch.qos.logback:logback-classic:1.4.5"
+logstash-logback-encoder = "net.logstash.logback:logstash-logback-encoder:7.2"
+
+mockk = "io.mockk:mockk:1.13.4"
+
+org-jetbrains-kotlin-jvm = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin" }
+
+postgres = "org.postgresql:postgresql:42.5.1"
+
+snakeyaml = "org.yaml:snakeyaml:1.33"
+
+slf4j-api = "org.slf4j:slf4j-api:2.0.6"
+
+# build-logic
+gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+[plugins]
+com-github-johnrengelman-shadow = "com.github.johnrengelman.shadow:7.1.2"
+com-google-cloud-tools-jib = "com.google.cloud.tools.jib:3.3.1"
+de-gesellix-docker = "de.gesellix.docker:2022-12-06T08-00-00"
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+jk1-dependencylicensereport = "com.github.jk1.dependency-license-report:2.1"

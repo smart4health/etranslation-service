@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Developer 1
+      comment: Set up the request table
+      changes:
+        - sqlFile:
+            path: db/sql/01-create-request-response-tables.sql
+  - changeSet:
+      id: 2
+      author: Developer 1
+      comment: Create a table for parts of a single translation request
+      changes:
+        - sqlFile:
+            path: db/sql/02-create-request-part-table.sql

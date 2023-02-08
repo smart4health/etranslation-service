@@ -1,0 +1,240 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: eTranslation API
+  description: API to asynchronously translate FHIR documents
+
+servers:
+  - url: https://etranslation.smart4health.eu/api/v1
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+
+security:
+  - BasicAuth: []
+
+paths:
+  "/health":
+    get:
+      tags: ["Meta"]
+      description: Perform a basic health check
+      responses:
+        "200":
+          description: Health check successful
+
+  "/configuration":
+    get:
+      tags: ["Meta"]
+      description: Get the supported languages and FHIR resource types
+      responses:
+        "200":
+          description: Fetching the configuration was successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                required:
+                  - languages
+                  - resourceTypes
+                properties:
+                  languages:
+                    type: array
+                    items:
+                      type: string
+                  resourceTypes:
+                    type: array
+                    items:
+                      type: string
+
+  "/openapi.yaml":
+    get:
+      tags: ["Meta"]
+      description: Get the OpenAPI V3 specification for this api
+      responses:
+        "200":
+          description: Success
+          content:
+            "application/yaml":
+              schema:
+                externalDocs:
+                  url: "https://swagger.io/specification/"
+
+  "/documents":
+    post:
+      tags: ["Document"]
+      description: Upload a FHIR resource for translation
+      parameters:
+        - name: from
+          in: query
+          description: Language the given resource is in.  Must be supported, see /configuration
+          required: true
+          schema:
+            type: string
+          example: EN
+        - name: to
+          in: query
+          description: Language to translate to. Must be supported, see /configuration
+          required: true
+          schema:
+            type: string
+          example: DE
+      requestBody:
+        required: true
+        content:
+          "application/fhir+json":
+            schema:
+              description: A FHIR resource
+              externalDocs:
+                url: "https://www.hl7.org/fhir/resourcelist.html"
+      responses:
+        "202":
+          description: Document was successfully processed
+          headers:
+            Location:
+              description: Link to the status endpoint for the new document
+              schema:
+                type: string
+          content:
+            "text/plain":
+              example: 0249b146-6c18-4d33-b154-bb28ebb32f1f
+        "400":
+          description: Malformed or unsupported FHIR resource
+
+  "/documents/{documentId}":
+    parameters:
+      - name: documentId
+        in: path
+        description: Which document to get status of
+        schema:
+          type: string
+        required: true
+        example: 0249b146-6c18-4d33-b154-bb28ebb32f1f
+    get:
+      tags: ["Document"]
+      description: Download the translated document
+      responses:
+        "200":
+          description: Translated document found
+          content:
+            "application/fhir+json":
+              schema:
+                description: A FHIR resource
+                externalDocs:
+                  url: "https://www.hl7.org/fhir/resourcelist.html"
+        "404":
+          description: Translated document not found
+    delete:
+      tags: ["Document"]
+      description: Delete a translation request or translated document
+      responses:
+        "200":
+          description: |
+            Translation request or translated document deleted. It may or may
+            not have existed beforehand.
+
+  "/queue/{documentId}":
+    get:
+      tags: ["Document"]
+      description: Get the status of a translation request
+      parameters:
+        - name: documentId
+          in: path
+          description: Which document to get status of
+          schema:
+            type: string
+          required: true
+          example: 0249b146-6c18-4d33-b154-bb28ebb32f1f
+      responses:
+        "200":
+          description: Document exists and is being processed
+          content:
+            "application/json":
+              schema:
+                required:
+                  - status
+                  - at
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - "UNTRANSLATED"
+                      - "SENT"
+                      - "TRANSLATED"
+                      - "TRANSLATION_ERROR"
+                      - "SEND_ERROR"
+                  at:
+                    type: string
+                    format: date-time
+        "303":
+          description: Document has been successfully translated
+          headers:
+            Location:
+              description: Link to the translated document
+              schema:
+                type: string
+                format: uri
+        "404":
+          description: Translation request not found
+
+  "/queue":
+    get:
+      parameters:
+        - name: ids
+          in: query
+          description: Comma separated list of IDs to check
+          schema:
+            type: string
+          required: true
+          example: "0249b146-6c18-4d33-b154-bb28ebb32f1f,cb2f01c5-bd48-4c2a-89eb-60a664477341"
+      tags: ["Document"]
+      description: Retrieve the statuses of multiple translation requests
+      responses:
+        "200":
+          description: "Statuses were retrieved successfully"
+          content:
+            "application/json":
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  nullable: true
+                  required:
+                    - status
+                    - at
+                  properties:
+                    status:
+                      type: string
+                      enum:
+                        - "UNTRANSLATED"
+                        - "SENT"
+                        - "TRANSLATED"
+                        - "ERROR"
+                    at:
+                      type: string
+                      format: date-time
+
+  "/cef/success-callback":
+    post:
+      tags: ["CEF"]
+      description: |
+        Endpoint to receive successfully translated documents from CEF. Internal
+        use only. See [CEF]
+        
+        [CEF]: https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/How+to+submit+a+translation+request+via+the+CEF+eTranslation+webservice
+      responses:
+        "200":
+          description: "Translated document received"
+
+  "/cef/error-callback":
+    post:
+      tags: ["CEF"]
+      description: |
+        Endpoint to receive errors from CEF. Internal use only. See [CEF]
+        
+        [CEF]: https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/How+to+submit+a+translation+request+via+the+CEF+eTranslation+webservice
+      responses:
+        "200":
+          description: "Errors received"

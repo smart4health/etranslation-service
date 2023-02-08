@@ -1,0 +1,9 @@
+<configuration>
+    <variable name="ES_LOG_LEVEL" value="${ES_LOG_LEVEL:-INFO}" />
+    <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+    <root level="${ES_LOG_LEVEL}">
+        <appender-ref ref="jsonConsoleAppender"/>
+    </root>
+</configuration>
