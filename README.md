@@ -1,5 +1,15 @@
 # etranslation-service
 
+---
+
+## Acknowledgements
+
+<img src="./assets/eu.jpg" align="left" alt="European Flag" width="60">
+
+This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 826117.
+
+---
+
 Backend service for the eTranslation app to use, abstracting other translation services, currently
 [CEF eTranslation].
 
